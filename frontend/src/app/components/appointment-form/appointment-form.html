@@ -1,0 +1,123 @@
+<div class="form-card">
+  <div class="form-header">
+    <div>
+      <h2 class="form-title">
+        {{ isEditMode ? 'Edit Appointment' : 'Book Appointment' }}
+      </h2>
+      <p class="form-subtitle">
+        {{
+          isEditMode
+            ? 'Update appointment details below'
+            : 'Fill in the details to create a new appointment'
+        }}
+      </p>
+    </div>
+    <span class="mode-badge" *ngIf="isEditMode">Editing</span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-grid">
+      <!-- Customer Name -->
+      <div class="form-field">
+        <label for="customer_name" class="field-label">
+          Customer Name
+          <span class="required-mark">*</span>
+        </label>
+        <input
+          id="customer_name"
+          type="text"
+          class="field-input"
+          formControlName="customer_name"
+          placeholder="Enter customer name"
+          [class.input-error]="
+            customerName?.invalid && (customerName?.touched || submitted)
+          "
+        />
+        <div
+          class="field-error"
+          *ngIf="customerName?.invalid && (customerName?.touched || submitted)"
+        >
+          <span *ngIf="customerName?.errors?.['required']">
+            Customer name is required
+          </span>
+          <span *ngIf="customerName?.errors?.['blank']">
+            Customer name cannot be empty
+          </span>
+        </div>
+      </div>
+
+      <!-- Appointment Date -->
+      <div class="form-field">
+        <label for="appointment_date" class="field-label">
+          Appointment Date &amp; Time
+          <span class="required-mark">*</span>
+        </label>
+        <input
+          id="appointment_date"
+          type="datetime-local"
+          class="field-input"
+          formControlName="appointment_date"
+          [class.input-error]="
+            appointmentDate?.invalid &&
+            (appointmentDate?.touched || submitted)
+          "
+        />
+        <div
+          class="field-error"
+          *ngIf="
+            appointmentDate?.invalid &&
+            (appointmentDate?.touched || submitted)
+          "
+        >
+          <span *ngIf="appointmentDate?.errors?.['required']">
+            Appointment date is required
+          </span>
+          <span *ngIf="appointmentDate?.errors?.['invalidDate']">
+            Please enter a valid date
+          </span>
+          <span *ngIf="appointmentDate?.errors?.['pastDate']">
+            Appointment must be in the future
+          </span>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="form-field">
+        <label for="status" class="field-label">
+          Status
+          <span class="required-mark">*</span>
+        </label>
+        <select
+          id="status"
+          class="field-input field-select"
+          formControlName="status"
+        >
+          <option *ngFor="let option of statusOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        *ngIf="isEditMode"
+        [disabled]="isSaving"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+        <span *ngIf="!isSaving">
+          {{ isEditMode ? 'Update Appointment' : 'Create Appointment' }}
+        </span>
+        <span *ngIf="isSaving">
+          {{ isEditMode ? 'Updating...' : 'Saving...' }}
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

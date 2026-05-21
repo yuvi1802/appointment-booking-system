@@ -1,0 +1,7 @@
+node_modules/
+appointments.db
+appointments.db-journal
+appointments.db-wal
+appointments.db-shm
+.env
+*.log

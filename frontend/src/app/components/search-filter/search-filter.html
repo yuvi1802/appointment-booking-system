@@ -1,0 +1,36 @@
+<div class="filter-card">
+  <div class="filter-row">
+    <div class="filter-search">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by customer name..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+      />
+    </div>
+
+    <div class="filter-status">
+      <select
+        class="status-select"
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="onStatusChange()"
+      >
+        <option value="">All Status</option>
+        <option *ngFor="let option of statusOptions" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
+
+    <button
+      type="button"
+      class="btn-clear"
+      *ngIf="hasActiveFilters"
+      (click)="onClear()"
+    >
+      Clear
+    </button>
+  </div>
+</div>

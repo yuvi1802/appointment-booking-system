@@ -1,0 +1,80 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2 class="list-title">Appointments</h2>
+    <span class="list-count" *ngIf="appointments.length > 0">
+      {{ appointments.length }}
+      {{ appointments.length === 1 ? 'appointment' : 'appointments' }}
+    </span>
+  </div>
+
+  <!-- Empty state: no data at all -->
+  <div
+    class="empty-state"
+    *ngIf="appointments.length === 0 && !hasActiveFilters"
+  >
+    <div class="empty-icon">📅</div>
+    <h3 class="empty-title">No appointments available</h3>
+    <p class="empty-subtitle">
+      Start by creating your first appointment using the form above.
+    </p>
+  </div>
+
+  <!-- Empty state: filters returned nothing -->
+  <div
+    class="empty-state"
+    *ngIf="appointments.length === 0 && hasActiveFilters"
+  >
+    <div class="empty-icon">🔍</div>
+    <h3 class="empty-title">No appointments found</h3>
+    <p class="empty-subtitle">
+      Try adjusting your search or filter to find what you're looking for.
+    </p>
+  </div>
+
+  <!-- Cards grid -->
+  <div class="cards-grid" *ngIf="appointments.length > 0">
+    <div
+      class="card"
+      *ngFor="let appointment of appointments; trackBy: trackById"
+    >
+      <div class="card-header">
+        <div class="card-name-section">
+          <h3 class="card-name">{{ appointment.customer_name }}</h3>
+          <app-status-badge [status]="appointment.status"></app-status-badge>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="card-row">
+          <span class="card-label">Date &amp; Time</span>
+          <span class="card-value">
+            {{ appointment.appointment_date | date: 'MMM d, y, h:mm a' }}
+          </span>
+        </div>
+        <div class="card-row" *ngIf="appointment.created_at">
+          <span class="card-label">Booked on</span>
+          <span class="card-value muted">
+            {{ appointment.created_at | date: 'MMM d, y' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button
+          class="btn btn-edit"
+          [disabled]="deletingId === appointment.id"
+          (click)="onEdit(appointment)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-delete"
+          [disabled]="deletingId === appointment.id"
+          (click)="onDelete(appointment.id)"
+        >
+          {{ deletingId === appointment.id ? 'Deleting...' : 'Delete' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
