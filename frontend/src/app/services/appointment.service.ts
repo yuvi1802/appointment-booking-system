@@ -12,7 +12,8 @@ export class AppointmentService {
   private apiUrl =
     'https://appointment-booking-backend-fk1i.onrender.com/api/appointments';
 
-  getAppointments(
+
+    getAppointments(
     search?: string,
     status?: AppointmentStatus | ''
   ): Observable<Appointment[]> {
@@ -25,7 +26,6 @@ export class AppointmentService {
     if (status) {
       params = params.set('status', status);
     }
-
     return this.http.get<Appointment[]>(this.apiUrl, { params });
   }
 
